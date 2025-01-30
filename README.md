@@ -1,7 +1,7 @@
 
 # Getting Started with Create React App
 
-Backend can be found at: github...
+Backend can be found at: https://github.com/Pekka-ai/week3_group_work   
 Update the backend's IP in the proxy section of package.json.
 
 ## Available Scripts
