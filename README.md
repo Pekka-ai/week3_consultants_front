@@ -1,6 +1,5 @@
-<img src="https://github.com/user-attachments/assets/52df3e60-c00f-4c71-95b5-a6dd34828e23" width="40%" />
-<img src="https://github.com/user-attachments/assets/9307c161-9aae-4d9e-97ae-59519fe5f0e2" width="40%" />
-
+<img src="https://github.com/user-attachments/assets/51646f80-44cf-4fb0-8015-dcf4ccf0657f" width="40%" />
+<img src="https://github.com/user-attachments/assets/ea342f09-13ce-4a0a-b5f4-ebbed3decf22" width="40%" />
 
 # Getting Started with Create React App
 
