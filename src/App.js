@@ -12,13 +12,13 @@ function App() {
   const [lunchBreak, setLunchBreak] = useState('');
   const [consultantId, setConsultantId] = useState('');
   const [customerId, setCustomerId] = useState('');
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState({ text: '', type: '' });
 
   // Raportointiin liittyvät tilat
   const [year, setYear] = useState(2025);
   const [startMonth, setStartMonth] = useState(1);
   const [endMonth, setEndMonth] = useState(2);
-  const [reportMessage, setReportMessage] = useState('');
+  const [reportMessage, setReportMessage] = useState({ text: '', type: '' });
 
   useEffect(() => {
     fetchConsultants();
@@ -32,6 +32,10 @@ function App() {
       setConsultants(response.data.consultants_list);
     } catch (error) {
       console.error('Error fetching consultants:', error);
+      setMessage({
+        text: 'Error fetching consultants: ' + error.message,
+        type: 'error',
+      });
     }
   };
 
@@ -42,11 +46,18 @@ function App() {
       setCustomers(response.data.customers_list);
     } catch (error) {
       console.error('Error fetching customers:', error);
+      setMessage({
+        text: 'Error fetching customers: ' + error.message,
+        type: 'error',
+      });
     }
   };
 
   // Konsultointisession luominen
   const createConsultantSession = async () => {
+    // Nollataan viesti ennen session luomista
+    setMessage({ text: '', type: '' });
+  
     try {
       const newSession = {
         start,
@@ -56,16 +67,13 @@ function App() {
         customer_id: customerId,
       };
   
-      console.log("Sending session data:", newSession); // Debug-tulostus
-      
-      // Lähetetään POST-pyyntö backendille
       const response = await axios.post('/consultant_sessions', newSession);
-      
-      console.log("Backend response:", response); // Debug-tulostus
   
-      // Tarkistetaan, että backend palauttaa "success"-viestin
       if (response.data && response.data.success) {
-        setMessage(response.data.success); // Näytetään onnistumisviesti
+        setMessage({
+          text: response.data.success,
+          type: 'success',
+        });
         // Tyhjennetään lomakekentät
         setStart('');
         setEnd('');
@@ -73,40 +81,52 @@ function App() {
         setConsultantId('');
         setCustomerId('');
       } else {
-        // Jos ei ole "success"-kenttää, näytetään virheviesti
-        setMessage('Error: ' + (response.data ? response.data.message : 'Unknown error'));
+        setMessage({
+          text: 'Error: ' + (response.data ? response.data.message : 'Unknown error'),
+          type: 'error',
+        });
       }
     } catch (error) {
-      console.error("Error creating session:", error); // Virhelogitus
-      setMessage('Error creating session: ' + (error.message || 'Unknown error'));
+      console.error('Error creating session:', error);
+      setMessage({
+        text: 'Error creating session: ' + (error.message || 'Unknown error'),
+        type: 'error',
+      });
     }
   };
+  
 
   // Raportin tilaus
   const requestReport = async () => {
+    // Nollataan viesti ennen raportin tilauspyyntöä
+    setReportMessage({ text: '', type: '' });
+  
     try {
       const reportData = {
         year,
         start_month: startMonth,
         end_month: endMonth,
       };
-
-      console.log("Sending report request:", reportData); // Debug-tulostus
-
-      // Lähetetään POST-pyyntö raportin tilaukselle
+  
       const response = await axios.post('/reports', reportData);
-
-      console.log("Backend response:", response); // Debug-tulostus
-
-      // Tarkistetaan, että backend palauttaa "message"-kentän
+  
       if (response.data && response.data.message) {
-        setReportMessage(`Report generated successfully: ${response.data.message}`);
+        setReportMessage({
+          text: `Report generated successfully: ${response.data.message}`,
+          type: 'success',
+        });
       } else {
-        setReportMessage('Error: ' + (response.data ? response.data.message : 'Unknown error'));
+        setReportMessage({
+          text: 'Error: ' + (response.data ? response.data.message : 'Unknown error'),
+          type: 'error',
+        });
       }
     } catch (error) {
-      console.error("Error requesting report:", error); // Virhelogitus
-      setReportMessage('Error requesting report: ' + (error.message || 'Unknown error'));
+      console.error('Error requesting report:', error);
+      setReportMessage({
+        text: 'Error requesting report: ' + (error.message || 'Unknown error'),
+        type: 'error',
+      });
     }
   };
 
@@ -173,7 +193,7 @@ function App() {
           placeholder="Lunch Break (minutes)"
         />
         <button className="button" onClick={createConsultantSession}>Create Session</button>
-        <div className="message">{message}</div> {/* Viesti onnistumisesta tai virheestä */}
+        <div className={`message ${message.type}`}>{message.text}</div> {/* Viesti onnistumisesta tai virheestä */}
       </div>
 
       {/* Raportin tilauslomake */}
@@ -201,7 +221,7 @@ function App() {
           placeholder="End Month"
         />
         <button className="button" onClick={requestReport}>Request Report</button>
-        <div className="message">{reportMessage}</div> {/* Raportin tilausviesti */}
+        <div className={`message ${reportMessage.type}`}>{reportMessage.text}</div> {/* Raportin tilausviesti */}
       </div>
     </div>
   );
