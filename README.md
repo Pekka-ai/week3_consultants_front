@@ -1,7 +1,10 @@
+<img src="https://github.com/user-attachments/assets/52df3e60-c00f-4c71-95b5-a6dd34828e23" width="40%" />
+<img src="https://github.com/user-attachments/assets/9307c161-9aae-4d9e-97ae-59519fe5f0e2" width="40%" />
+
 
 # Getting Started with Create React App
 
-Backend can be found at: github...
+Backend can be found at: https://github.com/Pekka-ai/week3_group_work   
 Update the backend's IP in the proxy section of package.json.
 
 ## Available Scripts
